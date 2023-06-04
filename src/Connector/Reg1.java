@@ -1,3 +1,5 @@
+package Connector;
+
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,18 +15,24 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Reg1 extends JFrame {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
     private JTextField textField;
     private JPasswordField passwordField;
     private JPasswordField passwordField_1;
     private JTextField textField_1;
+
+    // MySQL database credentials
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/ess";
+    private static final String DB_USERNAME = "root";
+    private static final String DB_PASSWORD = "";
 
     /**
      * Launch the application.
@@ -52,12 +60,20 @@ public class Reg1 extends JFrame {
         contentPane.setForeground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
+
+        // Group the radio buttons
+        ButtonGroup radioButtonGroup = new ButtonGroup();
         contentPane.setLayout(null);
 
-        // Background image
-        ImageIcon backgroundImg = new ImageIcon("C:\\Users\\anant\\Event Scheduling System\\ESS\\image\\image.jpg");
-        JLabel backgroundLabel = new JLabel(backgroundImg);
-        backgroundLabel.setBounds(0, 0, 782, 706);
+        JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("HOD");
+        rdbtnNewRadioButton_1.setBounds(421, 191, 111, 23);
+        contentPane.add(rdbtnNewRadioButton_1);
+        rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        radioButtonGroup.add(rdbtnNewRadioButton_1);
+
+        JLabel backgroundLabel = new JLabel(new ImageIcon("C:\\Users\\anant\\Event Scheduling System\\ESS\\image\\image.jpg"));
+        backgroundLabel.setBackground(new Color(240, 240, 240));
+        backgroundLabel.setBounds(0, 0, 768, 679);
         contentPane.add(backgroundLabel);
 
         JLabel lblNewLabel = new JLabel("Registration");
@@ -70,18 +86,10 @@ public class Reg1 extends JFrame {
         rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 15));
         rdbtnNewRadioButton.setBounds(242, 192, 111, 23);
         backgroundLabel.add(rdbtnNewRadioButton);
-
-        JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("HOD");
-        rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
-        rdbtnNewRadioButton_1.setBounds(424, 194, 111, 23);
-        backgroundLabel.add(rdbtnNewRadioButton_1);
-
-        // Group the radio buttons
-        ButtonGroup radioButtonGroup = new ButtonGroup();
         radioButtonGroup.add(rdbtnNewRadioButton);
-        radioButtonGroup.add(rdbtnNewRadioButton_1);
 
         JLabel lblNewLabel_1 = new JLabel("USERNAME");
+        lblNewLabel_1.setForeground(new Color(255, 255, 255));
         lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         lblNewLabel_1.setBounds(333, 240, 84, 34);
         backgroundLabel.add(lblNewLabel_1);
@@ -92,6 +100,7 @@ public class Reg1 extends JFrame {
         textField.setColumns(10);
 
         JLabel lblNewLabel_1_1 = new JLabel("PASSWORD");
+        lblNewLabel_1_1.setForeground(new Color(255, 255, 255));
         lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         lblNewLabel_1_1.setBounds(333, 316, 84, 34);
         backgroundLabel.add(lblNewLabel_1_1);
@@ -101,6 +110,7 @@ public class Reg1 extends JFrame {
         backgroundLabel.add(passwordField);
 
         JLabel lblNewLabel_1_1_1 = new JLabel("CONFIRM PASSWORD");
+        lblNewLabel_1_1_1.setForeground(new Color(255, 255, 255));
         lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         lblNewLabel_1_1_1.setBounds(293, 380, 180, 34);
         backgroundLabel.add(lblNewLabel_1_1_1);
@@ -110,11 +120,13 @@ public class Reg1 extends JFrame {
         backgroundLabel.add(passwordField_1);
 
         JLabel lblNewLabel_1_1_1_1 = new JLabel("EMAIL");
+        lblNewLabel_1_1_1_1.setForeground(new Color(255, 255, 255));
         lblNewLabel_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         lblNewLabel_1_1_1_1.setBounds(333, 437, 180, 34);
         backgroundLabel.add(lblNewLabel_1_1_1_1);
 
         JLabel lblNewLabel_1_1_1_1_1 = new JLabel("DEPARTMENT");
+        lblNewLabel_1_1_1_1_1.setForeground(new Color(255, 255, 255));
         lblNewLabel_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         lblNewLabel_1_1_1_1_1.setBounds(318, 501, 180, 34);
         backgroundLabel.add(lblNewLabel_1_1_1_1_1);
@@ -135,7 +147,7 @@ public class Reg1 extends JFrame {
         JButton btnSignUp = new JButton("Sign Up");
         btnSignUp.setBounds(311, 579, 111, 23);
         backgroundLabel.add(btnSignUp);
-        
+
         textField_1 = new JTextField();
         textField_1.setColumns(10);
         textField_1.setBounds(277, 469, 196, 20);
@@ -143,8 +155,56 @@ public class Reg1 extends JFrame {
 
         // Action listener for sign up button
         btnSignUp.addActionListener(e -> {
-            // Show registration completed message
-            JOptionPane.showMessageDialog(null, "Registration completed! ");
+            // Retrieve the values from the fields
+            String username = textField.getText();
+            String password = new String(passwordField.getPassword());
+            String confirmPassword = new String(passwordField_1.getPassword());
+            String email = textField_1.getText();
+            String department = departmentComboBox.getSelectedItem().toString();
+
+            // Validate the data
+            if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()
+                    || department.equals("Select a Department")) {
+                JOptionPane.showMessageDialog(null, "Please fill in all the fields!");
+            } else if (!password.equals(confirmPassword)) {
+                JOptionPane.showMessageDialog(null, "Passwords do not match!");
+            } else {
+                // Save the data to the database
+                saveToDatabase(username, password, email, department);
+            }
         });
+    }
+
+    /**
+     * Save the registration data to the database.
+     */
+    private void saveToDatabase(String username, String password, String email, String department) {
+        try {
+            // Establish a connection to the database
+            Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+
+            // Create a prepared statement with an SQL query
+            String query = "INSERT INTO ess (username, password, email, department) VALUES (?, ?, ?, ?)";
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            // Set the parameter values in the prepared statement
+            statement.setString(1, username);
+            statement.setString(2, password);
+            statement.setString(3, email);
+            statement.setString(4, department);
+
+            // Execute the SQL query
+            statement.executeUpdate();
+
+            // Close the connection and statement
+            statement.close();
+            conn.close();
+
+            // Show registration completed message
+            JOptionPane.showMessageDialog(null, "Registration completed!");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: Failed to save data to the database!");
+        }
     }
 }

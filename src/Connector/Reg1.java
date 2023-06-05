@@ -64,6 +64,14 @@ public class Reg1 extends JFrame {
         // Group the radio buttons
         ButtonGroup radioButtonGroup = new ButtonGroup();
         contentPane.setLayout(null);
+        
+        JButton btnReset = new JButton("Reset");
+        btnReset.setBounds(436, 580, 111, 23);
+        contentPane.add(btnReset);
+        
+        JButton btnLogin = new JButton("Login");
+        btnLogin.setBounds(187, 580, 111, 23);
+        contentPane.add(btnLogin);
 
         JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("HOD");
         rdbtnNewRadioButton_1.setBounds(421, 191, 111, 23);

@@ -19,6 +19,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Reg1 extends JFrame {
 
@@ -72,6 +74,17 @@ public class Reg1 extends JFrame {
 		contentPane.add(btnReset);
 
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				// Redirect to the Login.java page
+		        Login login = new Login();
+		        login.setVisible(true);
+		        dispose(); // Close the current registration frame	
+				
+				
+			}
+		});
 		btnLogin.setForeground(new Color(255, 255, 255));
 		btnLogin.setBackground(new Color(0, 128, 255));
 		btnLogin.setBounds(203, 567, 111, 23);
@@ -171,6 +184,10 @@ public class Reg1 extends JFrame {
 			String email = textField_1.getText();
 			String department = departmentComboBox.getSelectedItem().toString();
 
+			
+			
+			
+			
 			// Validate the data
 			if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()
 					|| department.equals("Select a Department")) {
@@ -182,6 +199,11 @@ public class Reg1 extends JFrame {
 				saveToDatabase(username, password, email, department);
 			}
 		});
+		
+		
+		
+		
+		
 		departmentComboBox.addItem("Civil");
 		departmentComboBox.addItem("ECE");
 		departmentComboBox.addItem("EEE");

@@ -1,6 +1,10 @@
 package Connector;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.ImageIcon;
+import java.awt.Color;
+import java.awt.Font;
 
 public class loginlanding {
 
@@ -18,8 +22,20 @@ public class loginlanding {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 450, 300);
+        frame.setBounds(100, 100, 874, 703);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.getContentPane().setLayout(null);
+        
+        JLabel lblNewLabel_1 = new JLabel("Login Landing, Content to be added");
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 47));
+        lblNewLabel_1.setForeground(new Color(255, 255, 255));
+        lblNewLabel_1.setBounds(42, 172, 771, 207);
+        frame.getContentPane().add(lblNewLabel_1);
+        
+        JLabel lblNewLabel = new JLabel("New label");
+        lblNewLabel.setIcon(new ImageIcon("H:\\Equinox\\equinox2023.github.io\\images\\nainoa-shizuru-unsplash-blur.jpg"));
+        lblNewLabel.setBounds(-11, 0, 871, 666);
+        frame.getContentPane().add(lblNewLabel);
 
         // Add your code here to design the login landing window
 

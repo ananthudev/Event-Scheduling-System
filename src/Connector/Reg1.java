@@ -78,7 +78,7 @@ public class Reg1 extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				// Redirect to the Login.java page
-		        Login login = new Login();
+		        login login = new login();
 		        login.setVisible(true);
 		        dispose(); // Close the current registration frame	
 				

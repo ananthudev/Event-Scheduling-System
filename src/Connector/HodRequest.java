@@ -70,6 +70,7 @@ public class HodRequest {
         frame.getContentPane().add(departmentComboBox);
 
         // Add dropdown options
+        departmentComboBox.addItem("Select Department");
         departmentComboBox.addItem("Civil");
         departmentComboBox.addItem("ECE");
         departmentComboBox.addItem("EEE");
@@ -95,8 +96,7 @@ public class HodRequest {
         frame.getContentPane().add(lblNewLabel_1_1_1);
 
         JSpinner spinner = new JSpinner();
-        spinner.setModel(new SpinnerDateModel(new Date(1685989800000L), new Date(1685989800000L),
-                new Date(1685989800000L), Calendar.HOUR_OF_DAY));
+        spinner.setModel(new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY));
         spinner.setBounds(574, 331, 123, 20);
         frame.getContentPane().add(spinner);
 
@@ -121,8 +121,7 @@ public class HodRequest {
         frame.getContentPane().add(lblNewLabel_1_1_1_2);
 
         JSpinner spinner_1 = new JSpinner();
-        spinner_1.setModel(new SpinnerDateModel(new Date(1685989800000L), new Date(1685989800000L),
-                new Date(1685989800000L), Calendar.DAY_OF_YEAR));
+        spinner_1.setModel(new SpinnerDateModel(new Date(), null, null, Calendar.HOUR_OF_DAY));
         spinner_1.setBounds(574, 373, 123, 20);
         frame.getContentPane().add(spinner_1);
 
@@ -141,6 +140,20 @@ public class HodRequest {
         frame.setBounds(100, 100, 992, 757);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+
+
+        btnNewButton_1_2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Reset the values of the fields
+                departmentComboBox.setSelectedIndex(0);
+                textField.setText("");
+                spinner.setValue(new Date());
+                spinner_1.setValue(new Date());
+                rdbtnNewRadioButton.setSelected(false);
+                rdbtnPm.setSelected(false);
+            }
+        });
+
         // ActionListener for the Request button
         btnNewButton_1_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -151,7 +164,7 @@ public class HodRequest {
                 Date eventEndDate = (Date) spinner_1.getValue();
                 String ampm = rdbtnNewRadioButton.isSelected() ? "AM" : "PM";
 
-                try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ess", "root", "system");
+                try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                      PreparedStatement statement = connection.prepareStatement(INSERT_QUERY)) {
                     // Set the parameter values in the prepared statement
                     statement.setString(1, department);

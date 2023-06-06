@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JScrollPane;
+import java.awt.Component;
 
 public class AdminEvents {
 
@@ -136,7 +138,11 @@ public class AdminEvents {
 		btnDeny.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnDeny.setBounds(229, 546, 89, 23);
 		frmAdminEvents.getContentPane().add(btnDeny);
-		frmAdminEvents.setBounds(100, 100, 874, 703);
+		
+		JScrollPane scrollPane = new JScrollPane((Component) null);
+		scrollPane.setBounds(365, 286, 527, 166);
+		frmAdminEvents.getContentPane().add(scrollPane);
+		frmAdminEvents.setBounds(100, 100, 919, 703);
 		frmAdminEvents.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 }

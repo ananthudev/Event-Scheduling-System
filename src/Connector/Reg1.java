@@ -18,6 +18,7 @@ import javax.swing.ImageIcon;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -149,6 +150,8 @@ public class Reg1 extends JFrame {
 
         // Button to perform sign up
         JButton btnSignUp = new JButton("Sign Up");
+       
+        
         btnSignUp.setForeground(new Color(255, 255, 255));
         btnSignUp.setBackground(new Color(0, 128, 255));
         contentPane.add(btnSignUp);
@@ -171,6 +174,12 @@ public class Reg1 extends JFrame {
         rdbtnNewRadioButton.setBounds(242, 192, 111, 23);
         backgroundLabel.add(rdbtnNewRadioButton);
         radioButtonGroup.add(rdbtnNewRadioButton);
+        
+        JRadioButton rdbtnNewRadioButton_11 = new JRadioButton("HOD");
+        rdbtnNewRadioButton_11.setBounds(421, 191, 111, 23);
+        contentPane.add(rdbtnNewRadioButton_11);
+        rdbtnNewRadioButton_11.setFont(new Font("Tahoma", Font.PLAIN, 15));
+        radioButtonGroup.add(rdbtnNewRadioButton_11);
 
         // Action listener for sign up button
         btnSignUp.addActionListener(e -> {
@@ -180,6 +189,7 @@ public class Reg1 extends JFrame {
             String confirmPassword = new String(passwordField_1.getPassword());
             String email = textField_1.getText();
             String department = departmentComboBox.getSelectedItem().toString();
+            String userType = rdbtnNewRadioButton.isSelected() ? "ADMIN" : "HOD"; // Determine the selected user type
 
             // Validate the data
             if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()
@@ -188,8 +198,13 @@ public class Reg1 extends JFrame {
             } else if (!password.equals(confirmPassword)) {
                 JOptionPane.showMessageDialog(null, "Passwords do not match!");
             } else {
-                // Save the data to the database
-                saveToDatabase(username, password, email, department);
+                // Check if username or email already exists
+                if (checkExistingUser(username, email)) {
+                    JOptionPane.showMessageDialog(null, "Username or email already exists!");
+                } else {
+                    // Save the data to the database
+                    saveToDatabase(username, password, email, department, userType);
+                }
             }
         });
 
@@ -214,13 +229,13 @@ public class Reg1 extends JFrame {
     /**
      * Save the registration data to the database.
      */
-    private void saveToDatabase(String username, String password, String email, String department) {
+    private void saveToDatabase(String username, String password, String email, String department, String userType) {
         try {
             // Establish a connection to the database
             Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
             // Create a prepared statement with an SQL query
-            String query = "INSERT INTO ess (username, password, email, department) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO reg (username, password, email, department, userType) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(query);
 
             // Set the parameter values in the prepared statement
@@ -228,6 +243,7 @@ public class Reg1 extends JFrame {
             statement.setString(2, password);
             statement.setString(3, email);
             statement.setString(4, department);
+            statement.setString(5, userType);
 
             // Execute the SQL query
             statement.executeUpdate();
@@ -241,6 +257,41 @@ public class Reg1 extends JFrame {
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: Failed to save data to the database!");
+        }
+    }
+
+    /**
+     * Check if the username or email already exists in the database.
+     */
+    private boolean checkExistingUser(String username, String email) {
+        try {
+            // Establish a connection to the database
+            Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+
+            // Create a prepared statement with an SQL query
+            String query = "SELECT * FROM reg WHERE username = ? OR email = ?";
+            PreparedStatement statement = conn.prepareStatement(query);
+
+            // Set the parameter values in the prepared statement
+            statement.setString(1, username);
+            statement.setString(2, email);
+
+            // Execute the SQL query and get the result set
+            ResultSet resultSet = statement.executeQuery();
+
+            // Check if any rows are returned
+            boolean existingUser = resultSet.next();
+
+            // Close the connection, statement, and result set
+            resultSet.close();
+            statement.close();
+            conn.close();
+
+            return existingUser;
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error: Failed to retrieve data from the database!");
+            return false;
         }
     }
 }

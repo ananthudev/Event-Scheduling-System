@@ -67,4 +67,9 @@ public class HodWindow {
 		frmHodPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

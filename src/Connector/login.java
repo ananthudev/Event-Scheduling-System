@@ -12,19 +12,15 @@ import java.sql.SQLException;
 
 public class login extends JFrame {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	// MySQL database credentials
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/ess";
-    private static final String DB_USERNAME = "root";
-    private static final String DB_PASSWORD = "system";
+    private static final long serialVersionUID = 1L;
     private JTextField textField_2;
     private JPasswordField passwordField;
+    private JRadioButton rdbtnNewRadioButton;
+    private JRadioButton rdbtnNewRadioButton_1;
 
     public login() {
-        setIconImage(Toolkit.getDefaultToolkit().getImage("H:\\Equinox\\equinox2023.github.io\\images\\edward-unsplash-blur.jpg"));
+        getContentPane().setForeground(new Color(255, 255, 255));
+        setIconImage(Toolkit.getDefaultToolkit().getImage("H:\\ESS\\Event-Scheduling-System\\image\\edward-unsplash-blur.jpg"));
         initialize();
     }
 
@@ -60,69 +56,120 @@ public class login extends JFrame {
         passwordField.setBounds(392, 320, 132, 20);
         getContentPane().add(passwordField);
 
-        // Button to perform login
-        JButton btnNewButton = new JButton("Sign In");
-        btnNewButton.setBackground(new Color(0, 128, 255));
-        btnNewButton.setForeground(new Color(255, 255, 255));
+        JLabel lblNewLabel_3 = new JLabel("User Type");
+        lblNewLabel_3.setForeground(Color.WHITE);
+        lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblNewLabel_3.setBounds(282, 361, 116, 35);
+        getContentPane().add(lblNewLabel_3);
+
+        rdbtnNewRadioButton = new JRadioButton("Admin");
+        rdbtnNewRadioButton.setForeground(new Color(0, 0, 0));
+        rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        rdbtnNewRadioButton.setBounds(392, 371, 73, 23);
+        getContentPane().add(rdbtnNewRadioButton);
+
+        rdbtnNewRadioButton_1 = new JRadioButton("HOD");
+        rdbtnNewRadioButton_1.setForeground(new Color(0, 0, 0));
+        rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        rdbtnNewRadioButton_1.setBounds(479, 371, 73, 23);
+        getContentPane().add(rdbtnNewRadioButton_1);
+
+        ButtonGroup userTypeGroup = new ButtonGroup();
+        userTypeGroup.add(rdbtnNewRadioButton);
+        userTypeGroup.add(rdbtnNewRadioButton_1);
+
+        JButton btnNewButton = new JButton("Login");
+        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
         btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Fetch data from the database
                 String username = textField_2.getText();
                 String password = new String(passwordField.getPassword());
+                String userType = "";
 
-                if (checkUserExists(username, password)) {
-                    // User exists, close the login window
-                    setVisible(false);
+                if (rdbtnNewRadioButton.isSelected()) {
+                    userType = "Admin";
+                } else if (rdbtnNewRadioButton_1.isSelected()) {
+                    userType = "HOD";
+                }
 
-                    // Open the main window (loginlanding)
-                    loginlanding mainWindow = new loginlanding();
-                    mainWindow.setVisible(true);
+                if (username.isEmpty() || password.isEmpty() || userType.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please fill in all the fields.", "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 } else {
-                    // User doesn't exist, display a message
-                    JOptionPane.showMessageDialog(null, "Invalid username or password.");
+                    try {
+                        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ess", "root", "system");
+                        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM reg WHERE username=? AND password=?");
+
+                        stmt.setString(1, username);
+                        stmt.setString(2, password);
+
+                        ResultSet rs = stmt.executeQuery();
+
+                        if (rs.next()) {
+                            JOptionPane.showMessageDialog(null, "Login Successful!");
+
+                            if (userType.equals("Admin")) {
+                                AdminWindow adminWindow = new AdminWindow();
+                                adminWindow.setVisible(true);
+                            } else if (userType.equals("HOD")) {
+                                HodWindow hodWindow = new HodWindow();
+                                hodWindow.setVisible(true);
+                            }
+
+                            dispose(); // Close the login window
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Invalid username, password, or user type.", "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
+
+                        rs.close();
+                        stmt.close();
+                        conn.close();
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
         });
-        // Set the position and size of the button
-        btnNewButton.setBounds(354, 395, 89, 23);
+
+        btnNewButton.setBounds(376, 428, 89, 23);
         getContentPane().add(btnNewButton);
-        
-        JRadioButton rdbtnNewRadioButton = new JRadioButton("ADMIN");
-        rdbtnNewRadioButton.setVerticalAlignment(SwingConstants.TOP);
-        rdbtnNewRadioButton.setForeground(new Color(0, 0, 0));
-        rdbtnNewRadioButton.setBounds(270, 217, 111, 23);
-        getContentPane().add(rdbtnNewRadioButton);
-                
-                JRadioButton rdbtnNewRadioButton_1 = new JRadioButton("HOD");
-                rdbtnNewRadioButton_1.setVerticalAlignment(SwingConstants.TOP);
-                rdbtnNewRadioButton_1.setForeground(Color.BLACK);
-                rdbtnNewRadioButton_1.setBounds(422, 217, 111, 23);
-                getContentPane().add(rdbtnNewRadioButton_1);
-                
-                        JLabel lblNewLabel = new JLabel("New label");
-                        lblNewLabel.setIcon(new ImageIcon("H:\\Equinox\\equinox2023.github.io\\images\\edward-unsplash-blur.jpg"));
-                        lblNewLabel.setBounds(-11, 0, 871, 677);
-                        getContentPane().add(lblNewLabel);
 
-        // Set the visibility of the login window to true
-        setVisible(true);
-    }
+        getContentPane().setBackground(new Color(255, 255, 255));
 
-    private boolean checkUserExists(String username, String password) {
-        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD)) {
-            String query = "SELECT * FROM ess WHERE username = ? AND password = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
-            statement.setString(1, username);
-            statement.setString(2, password);
-            ResultSet resultSet = statement.executeQuery();
-            return resultSet.next();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        JButton btnNewButton_1 = new JButton("Register");
+        btnNewButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+
+            }
+        });
+        btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btnNewButton_1.setBounds(248, 428, 89, 23);
+        getContentPane().add(btnNewButton_1);
+
+        JButton btnReset = new JButton("Reset");
+        btnReset.setFont(new Font("Tahoma", Font.PLAIN, 14));
+        btnReset.setBounds(497, 430, 89, 23);
+        getContentPane().add(btnReset);
+
+        JLabel lblNewLabel = new JLabel("New label");
+        lblNewLabel.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\edward-unsplash-blur.jpg"));
+        lblNewLabel.setBounds(0, 0, 860, 666);
+        getContentPane().add(lblNewLabel);
     }
 
     public static void main(String[] args) {
-        login frame = new login();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    login frame = new login();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }

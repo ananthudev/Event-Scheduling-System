@@ -55,6 +55,20 @@ public class HodRequest {
         frame = new JFrame();
         frame.getContentPane().setBackground(new Color(0, 128, 128));
         frame.getContentPane().setLayout(null);
+        
+        JLabel lblNewLabel_2 = new JLabel("");
+        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 6));
+        lblNewLabel_2.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent e) {
+        		HodWindow hodWindow = new HodWindow();
+                hodWindow.setVisible(true);
+                frame.dispose(); 
+        	}
+        });
+        lblNewLabel_2.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
+        lblNewLabel_2.setBounds(163, 121, 96, 96);
+        frame.getContentPane().add(lblNewLabel_2);
 
         JLabel lblNewLabel = new JLabel("Create Event Request");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 38));
@@ -69,7 +83,7 @@ public class HodRequest {
         frame.getContentPane().add(lblNewLabel_1_2);
 
         JComboBox<String> departmentComboBox = new JComboBox<String>();
-        departmentComboBox.setBounds(543, 233, 123, 20);
+        departmentComboBox.setBounds(543, 233, 134, 20);
         frame.getContentPane().add(departmentComboBox);
 
         // Add dropdown options
@@ -90,7 +104,7 @@ public class HodRequest {
 
         textField = new JTextField();
         textField.setColumns(10);
-        textField.setBounds(543, 268, 123, 20);
+        textField.setBounds(543, 268, 134, 20);
         frame.getContentPane().add(textField);
 
         JLabel lblNewLabel_1 = new JLabel("Hall Requested");
@@ -100,7 +114,7 @@ public class HodRequest {
         frame.getContentPane().add(lblNewLabel_1);
 
         JComboBox<String> departmentComboBox_1 = new JComboBox<String>();
-        departmentComboBox_1.setBounds(543, 304, 123, 20);
+        departmentComboBox_1.setBounds(543, 304, 134, 20);
         frame.getContentPane().add(departmentComboBox_1);
 
         // Add dropdown options
@@ -119,7 +133,7 @@ public class HodRequest {
 
         JSpinner spinner = new JSpinner();
         spinner.setModel(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_YEAR));
-        spinner.setBounds(543, 335, 123, 20);
+        spinner.setBounds(543, 335, 134, 20);
         frame.getContentPane().add(spinner);
 
         JLabel lblNewLabel_1_1_1_1_1 = new JLabel("Event End Date & Time");
@@ -130,7 +144,7 @@ public class HodRequest {
 
         JSpinner spinner_1 = new JSpinner();
         spinner_1.setModel(new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_YEAR));
-        spinner_1.setBounds(543, 375, 123, 20);
+        spinner_1.setBounds(543, 375, 134, 20);
         frame.getContentPane().add(spinner_1);
 
         JButton btnNewButton_1_1 = new JButton("Submit");
@@ -154,20 +168,6 @@ public class HodRequest {
         btnNewButton_1_1_1.setBackground(Color.WHITE);
         btnNewButton_1_1_1.setBounds(543, 423, 120, 40);
         frame.getContentPane().add(btnNewButton_1_1_1);
-        
-        JLabel lblNewLabel_2 = new JLabel("");
-        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 6));
-        lblNewLabel_2.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
-        		HodWindow hodWindow = new HodWindow();
-                hodWindow.setVisible(true);
-                frame.dispose(); 
-        	}
-        });
-        lblNewLabel_2.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\Graphicloads-100-Flat-Home.72.png"));
-        lblNewLabel_2.setBounds(163, 121, 72, 72);
-        frame.getContentPane().add(lblNewLabel_2);
 
         btnNewButton_1_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

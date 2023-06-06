@@ -71,7 +71,8 @@ public class HodWindow {
         btnViewAllEvents.setBounds(497, 312, 181, 86);
         frame.getContentPane().add(btnViewAllEvents);
 
-        JButton btnNewButton_1 = new JButton("Return");
+        JButton btnNewButton_1 = new JButton("Log Out");
+        btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         btnNewButton_1.setBounds(638, 516, 135, 58);
         frame.getContentPane().add(btnNewButton_1);
         frame.setBounds(100, 100, 874, 703);

@@ -24,6 +24,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class AdminEvents {
 
@@ -37,6 +40,7 @@ public class AdminEvents {
 
 	private Connection connection;
 	private DefaultTableModel tableModel;
+	private JButton btnDelete;
 
 	/**
 	 * Launch the application.
@@ -138,11 +142,7 @@ public class AdminEvents {
 		btnUpdate.setBounds(214, 464, 100, 32);
 		frmAdminEvents.getContentPane().add(btnUpdate);
 		
-		JButton btnDelete = new JButton("Refresh");
-		btnDelete.setForeground(Color.BLACK);
-		btnDelete.setBackground(Color.WHITE);
-		btnDelete.setBounds(589, 428, 100, 32);
-		frmAdminEvents.getContentPane().add(btnDelete);
+	
 						
 		textField_3 = new JTextField();
 		textField_3.setBounds(158, 325, 205, 23);
@@ -191,6 +191,11 @@ public class AdminEvents {
 		frmAdminEvents.getContentPane().add(lblRequestedHall);
 		lblRequestedHall.setForeground(Color.WHITE);
 		lblRequestedHall.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		
+		JButton lblNewLabel_1 = new JButton("");
+		lblNewLabel_1.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\refresh.png"));
+		lblNewLabel_1.setBounds(618, 439, 81, 57);
+		frmAdminEvents.getContentPane().add(lblNewLabel_1);
 
 		frmAdminEvents.setBounds(100, 100, 914, 720);
 		frmAdminEvents.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -216,6 +221,9 @@ public class AdminEvents {
 	 */
 	private void populateTable() {
 	    try {
+	        // Clear existing data in the table
+	        tableModel.setRowCount(0);
+
 	        String query = "SELECT * FROM events";
 	        PreparedStatement statement = connection.prepareStatement(query);
 	        ResultSet resultSet = statement.executeQuery();
@@ -235,5 +243,9 @@ public class AdminEvents {
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
+	}
+
+	public JButton getBtnDelete() {
+		return btnDelete;
 	}
 }

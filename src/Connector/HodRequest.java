@@ -56,16 +56,16 @@ public class HodRequest {
         frame.getContentPane().setBackground(new Color(0, 128, 128));
         frame.getContentPane().setLayout(null);
         
-        JLabel lblNewLabel_2 = new JLabel("");
-        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 6));
-        lblNewLabel_2.addMouseListener(new MouseAdapter() {
-        	@Override
-        	public void mouseClicked(MouseEvent e) {
+        JButton lblNewLabel_2 = new JButton("");
+        lblNewLabel_2.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
         		HodWindow hodWindow = new HodWindow();
                 hodWindow.setVisible(true);
                 frame.dispose(); 
         	}
         });
+        lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 6));
         lblNewLabel_2.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
         lblNewLabel_2.setBounds(163, 121, 96, 96);
         frame.getContentPane().add(lblNewLabel_2);

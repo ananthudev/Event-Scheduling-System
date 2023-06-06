@@ -72,6 +72,14 @@ public class HodWindow {
         frame.getContentPane().add(btnViewAllEvents);
 
         JButton btnNewButton_1 = new JButton("Log Out");
+        btnNewButton_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        	login login = new login();
+                login.setVisible(true);
+                frame.dispose(); 
+        	}
+        });
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 15));
         btnNewButton_1.setBounds(638, 516, 135, 58);
         frame.getContentPane().add(btnNewButton_1);

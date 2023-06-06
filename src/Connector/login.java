@@ -101,7 +101,7 @@ public class login extends JFrame {
                 
                         JLabel lblNewLabel = new JLabel("New label");
                         lblNewLabel.setIcon(new ImageIcon("H:\\Equinox\\equinox2023.github.io\\images\\edward-unsplash-blur.jpg"));
-                        lblNewLabel.setBounds(-11, 11, 871, 666);
+                        lblNewLabel.setBounds(-11, 0, 871, 677);
                         getContentPane().add(lblNewLabel);
 
         // Set the visibility of the login window to true

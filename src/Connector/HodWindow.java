@@ -7,6 +7,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HodWindow {
 
@@ -51,6 +53,15 @@ public class HodWindow {
         frame.getContentPane().add(lblHodPanel);
 
         JButton btnCreateRequest = new JButton("Create Request");
+        btnCreateRequest.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		// Open the HodRequest window
+                HodRequest hodRequest = new HodRequest();
+                hodRequest.frame.setVisible(true);
+                frame.dispose(); // Close the current window
+        	}
+        });
         btnCreateRequest.setFont(new Font("Tahoma", Font.PLAIN, 20));
         btnCreateRequest.setBounds(118, 312, 181, 86);
         frame.getContentPane().add(btnCreateRequest);

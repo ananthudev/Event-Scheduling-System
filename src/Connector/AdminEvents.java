@@ -30,6 +30,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ListSelectionModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class AdminEvents {
 
@@ -151,18 +153,32 @@ public class AdminEvents {
 		comboBox.setBounds(158, 409, 205, 22);
 		frmAdminEvents.getContentPane().add(comboBox);
 
+		// Assign the comboBox object to the class member variable
+		this.comboBox = comboBox;
+
 		JButton btnApprove = new JButton("Approve");
+		btnApprove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateStatus("Approved");
+			}
+		});
 		btnApprove.setForeground(new Color(0, 0, 0));
 		btnApprove.setBackground(new Color(255, 255, 255));
 		btnApprove.setBounds(92, 478, 100, 32);
 		frmAdminEvents.getContentPane().add(btnApprove);
 
 		JButton btnDeny = new JButton("Deny");
+		btnDeny.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				 updateStatus("Denied");
+			}
+		});
 		btnDeny.setForeground(Color.BLACK);
 		btnDeny.setBackground(Color.WHITE);
 		btnDeny.setBounds(235, 478, 100, 32);
 		frmAdminEvents.getContentPane().add(btnDeny);
-
+		
 		JButton btnRefresh = new JButton("");
 		btnRefresh.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\refresh.png"));
 		btnRefresh.setBounds(618, 439, 81, 57);
@@ -174,6 +190,10 @@ public class AdminEvents {
 				populateTable();
 			}
 		});
+		
+		
+
+		
 
 		table = new JTable();
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -255,4 +275,35 @@ public class AdminEvents {
 			e.printStackTrace();
 		}
 	}
+
+
+	private void updateStatus(String status) {
+		 try {
+		        int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		            String eventName = table.getValueAt(selectedRow, 1).toString();
+		            String hall = comboBox.getSelectedItem().toString(); // Get the selected hall from the combobox
+
+		            String query = "UPDATE events SET status = ?, hall = ? WHERE eventname = ?";
+		            PreparedStatement statement = connection.prepareStatement(query);
+		            statement.setString(1, status);
+		            statement.setString(2, hall);
+		            statement.setString(3, eventName);
+		            statement.executeUpdate();
+
+		            statement.close();
+
+		            // Remove the selected row from the table
+		            tableModel.removeRow(selectedRow);
+
+		            // Deselect any row in the table
+		            table.clearSelection();
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		    }
+	}
 }
+
+
+

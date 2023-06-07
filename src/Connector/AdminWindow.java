@@ -47,7 +47,7 @@ public class AdminWindow {
         JLabel lblNewLabel = new JLabel("Admin Panel");
         lblNewLabel.setForeground(new Color(255, 255, 255));
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 38));
-        lblNewLabel.setBounds(305, 85, 214, 43);
+        lblNewLabel.setBounds(306, 43, 214, 43);
         frame.getContentPane().add(lblNewLabel);
 
         JButton btnNewButton = new JButton("View Events");
@@ -63,6 +63,12 @@ public class AdminWindow {
         JButton btnNewButton_1 = new JButton("Return");
         btnNewButton_1.setBounds(622, 506, 135, 58);
         frame.getContentPane().add(btnNewButton_1);
+        
+        JLabel lblWelcomeAdmin = new JLabel("Welcome Admin");
+        lblWelcomeAdmin.setForeground(Color.WHITE);
+        lblWelcomeAdmin.setFont(new Font("Tahoma", Font.PLAIN, 38));
+        lblWelcomeAdmin.setBounds(279, 139, 533, 43);
+        frame.getContentPane().add(lblWelcomeAdmin);
         frame.setBounds(100, 100, 874, 704);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -70,5 +76,4 @@ public class AdminWindow {
     public void setVisible(boolean b) {
         frame.setVisible(b);
     }
-
 }

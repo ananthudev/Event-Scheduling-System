@@ -56,19 +56,19 @@ public class HodWindow {
         btnCreateRequest.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		// Open the HodRequest window
-                HodRequest hodRequest = new HodRequest();
-                hodRequest.frame.setVisible(true);
-                frame.dispose(); // Close the current window
+//        		// Open the HodRequest window
+//                HodRequest hodRequest = new HodRequest();
+//                hodRequest.frame.setVisible(true);
+//                frame.dispose(); // Close the current window
         	}
         });
         btnCreateRequest.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnCreateRequest.setBounds(118, 312, 181, 86);
+        btnCreateRequest.setBounds(118, 312, 223, 86);
         frame.getContentPane().add(btnCreateRequest);
 
-        JButton btnViewAllEvents = new JButton("View All Events");
+        JButton btnViewAllEvents = new JButton("Pending Requests");
         btnViewAllEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnViewAllEvents.setBounds(497, 312, 181, 86);
+        btnViewAllEvents.setBounds(456, 312, 223, 86);
         frame.getContentPane().add(btnViewAllEvents);
 
         JButton btnNewButton_1 = new JButton("Log Out");

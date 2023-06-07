@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import java.awt.Component;
@@ -278,32 +279,44 @@ public class AdminEvents {
 
 
 	private void updateStatus(String status) {
-		 try {
-		        int selectedRow = table.getSelectedRow();
-		        if (selectedRow != -1) {
-		            String eventName = table.getValueAt(selectedRow, 1).toString();
-		            String hall = comboBox.getSelectedItem().toString(); // Get the selected hall from the combobox
+	    try {
+	        int selectedRow = table.getSelectedRow();
+	        if (selectedRow != -1) {
+	            String eventName = table.getValueAt(selectedRow, 1).toString();
 
-		            String query = "UPDATE events SET status = ?, hall = ? WHERE eventname = ?";
-		            PreparedStatement statement = connection.prepareStatement(query);
-		            statement.setString(1, status);
-		            statement.setString(2, hall);
-		            statement.setString(3, eventName);
-		            statement.executeUpdate();
+	            // Validate fields
+	            String department = textField.getText();
+	            String eventStart = textField_2.getText();
+	            String eventEnd = textField_4.getText();
+	            String hall = comboBox.getSelectedItem().toString();
 
-		            statement.close();
+	            if (department.isEmpty() || eventName.isEmpty() || eventStart.isEmpty() || eventEnd.isEmpty() || hall.equals("Select Hall")) {
+	                JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+	                return;
+	            }
 
-		            // Remove the selected row from the table
-		            tableModel.removeRow(selectedRow);
+	            String query = "UPDATE events SET status = ?, hall = ? WHERE eventname = ?";
+	            PreparedStatement statement = connection.prepareStatement(query);
+	            statement.setString(1, status);
+	            statement.setString(2, hall);
+	            statement.setString(3, eventName);
+	            statement.executeUpdate();
 
-		            // Deselect any row in the table
-		            table.clearSelection();
-		        }
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		    }
+	            statement.close();
+
+	            // Remove the selected row from the table
+	            tableModel.removeRow(selectedRow);
+
+	            // Deselect any row in the table
+	            table.clearSelection();
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
 	}
-}
+
+	}
+
 
 
 

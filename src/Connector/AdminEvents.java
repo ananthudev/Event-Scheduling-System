@@ -159,9 +159,17 @@ public class AdminEvents {
 
 		JButton btnApprove = new JButton("Approve");
 		btnApprove.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				updateStatus("Approved");
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        // Check if any field is empty
+		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
+		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
+		            comboBox.getSelectedItem().toString().equals("Select Hall")) {
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+		        } else {
+		            updateStatus("Approved");
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Event approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		        }
+		    }
 		});
 		btnApprove.setForeground(new Color(0, 0, 0));
 		btnApprove.setBackground(new Color(255, 255, 255));
@@ -170,14 +178,21 @@ public class AdminEvents {
 
 		JButton btnDeny = new JButton("Deny");
 		btnDeny.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				 updateStatus("Denied");
-			}
+		    public void actionPerformed(ActionEvent e) {
+		        // Check if any field is empty
+		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
+		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
+		            comboBox.getSelectedItem().toString().equals("Select Hall")) {
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+		        } else {
+		            updateStatus("Denied");
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Event denied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		        }
+		    }
 		});
-		btnDeny.setForeground(Color.BLACK);
-		btnDeny.setBackground(Color.WHITE);
-		btnDeny.setBounds(235, 478, 100, 32);
+		btnDeny.setForeground(new Color(0, 0, 0));
+		btnDeny.setBackground(new Color(255, 255, 255));
+		btnDeny.setBounds(204, 478, 100, 32);
 		frmAdminEvents.getContentPane().add(btnDeny);
 		
 		JButton btnRefresh = new JButton("");

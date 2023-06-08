@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class login extends JFrame {
+public class Login extends JFrame {
 
     private static final long serialVersionUID = 1L;
     private JTextField textField_2;
@@ -18,7 +18,7 @@ public class login extends JFrame {
     private JRadioButton rdbtnNewRadioButton;
     private JRadioButton rdbtnNewRadioButton_1;
 
-    public login() {
+    public Login() {
         getContentPane().setForeground(new Color(255, 255, 255));
         setIconImage(Toolkit.getDefaultToolkit().getImage("H:\\ESS\\Event-Scheduling-System\\image\\edward-unsplash-blur.jpg"));
         initialize();
@@ -112,7 +112,7 @@ public class login extends JFrame {
                                 AdminWindow adminWindow = new AdminWindow();
                                 adminWindow.setVisible(true);
                             } else if (userType.equals("HOD")) {
-                                HodWindow hodWindow = new HodWindow();
+                                HodWindow hodWindow = new HodWindow(username, userType);
                                 hodWindow.setVisible(true);
                             }
 
@@ -164,7 +164,7 @@ public class login extends JFrame {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    login frame = new login();
+                    Login frame = new Login();
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();

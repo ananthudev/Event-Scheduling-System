@@ -1,20 +1,18 @@
 package Connector;
 
-import java.awt.EventQueue;
+import javax.swing.*;
 
-import javax.swing.JFrame;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Color;
-import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JButton;
+import java.awt.Cursor;
 
 public class AdminWindow {
 
     private JFrame frame;
 
-    /**
-     * Launch the application.
-     */
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -28,52 +26,68 @@ public class AdminWindow {
         });
     }
 
-    /**
-     * Create the application.
-     */
     public AdminWindow() {
         initialize();
     }
 
-    /**
-     * Initialize the contents of the frame.
-     */
     private void initialize() {
         frame = new JFrame();
-        frame.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 24));
         frame.getContentPane().setBackground(new Color(0, 128, 128));
-        frame.getContentPane().setLayout(null);
-
-        JLabel lblNewLabel = new JLabel("Admin Panel");
-        lblNewLabel.setForeground(new Color(255, 255, 255));
-        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 38));
-        lblNewLabel.setBounds(306, 43, 214, 43);
-        frame.getContentPane().add(lblNewLabel);
-
-        JButton btnNewButton = new JButton("View Events");
-        btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnNewButton.setBounds(133, 279, 181, 86);
-        frame.getContentPane().add(btnNewButton);
-
-        JButton btnAllEvents = new JButton("All Events");
-        btnAllEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        btnAllEvents.setBounds(518, 279, 181, 86);
-        frame.getContentPane().add(btnAllEvents);
-
-        JButton btnNewButton_1 = new JButton("Return");
-        btnNewButton_1.setBounds(622, 506, 135, 58);
-        frame.getContentPane().add(btnNewButton_1);
-        
-        JLabel lblWelcomeAdmin = new JLabel("Welcome Admin");
-        lblWelcomeAdmin.setForeground(Color.WHITE);
-        lblWelcomeAdmin.setFont(new Font("Tahoma", Font.PLAIN, 38));
-        lblWelcomeAdmin.setBounds(279, 139, 533, 43);
-        frame.getContentPane().add(lblWelcomeAdmin);
-        frame.setBounds(100, 100, 874, 704);
+        frame.setBounds(100, 100, 992, 757);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JButton btnOpenAdminEvents = new JButton("Open Admin Events");
+        btnOpenAdminEvents.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnOpenAdminEvents.setBounds(248, 362, 189, 83);
+        btnOpenAdminEvents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                AdminEvents.main(null);
+                frame.dispose(); 
+            }
+        });
+        frame.getContentPane().setLayout(null);
+        
+        JLabel lblNewLabel = new JLabel("Admin Control Window");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 26));
+        lblNewLabel.setForeground(new Color(255, 255, 255));
+        lblNewLabel.setBounds(363, 137, 335, 106);
+        frame.getContentPane().add(lblNewLabel);
+        frame.getContentPane().add(btnOpenAdminEvents);
+        
+        JButton btnNewButton = new JButton(" View All Requests");
+        btnNewButton.setHorizontalTextPosition(SwingConstants.CENTER);
+        btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		AdminAllReq adminAllReq = new AdminAllReq();
+                adminAllReq.setVisible(true);
+                frame.dispose(); 
+        		
+        	}
+        	
+        	
+          
+        	
+        });
+        btnNewButton.setBounds(571, 362, 189, 83);
+        frame.getContentPane().add(btnNewButton);
+        
+        JButton btnNewButton_1 = new JButton("Log Out");
+        btnNewButton_1.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		login login = new login();
+                login.setVisible(true);
+                frame.dispose();
+        	}
+        });
+        btnNewButton_1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btnNewButton_1.setBounds(726, 576, 103, 42);
+        frame.getContentPane().add(btnNewButton_1);
     }
 
-    public void setVisible(boolean b) {
-        frame.setVisible(b);
-    }
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

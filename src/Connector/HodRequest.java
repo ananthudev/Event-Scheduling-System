@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,15 +28,31 @@ public class HodRequest {
 
     JFrame frmHodEventRequest;
     private JTextField textField;
-    protected Object frame;
-    private JFrame currentFrame;
 
     private static final String DB_URL = "jdbc:mysql://localhost:3306/ess";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "system";
-    private static final String INSERT_QUERY = "INSERT INTO events (eventname, eventstart, eventend) VALUES (?, ?, ?)";
+    private static final String INSERT_QUERY = "INSERT INTO events (department, eventname, eventstart, eventend) VALUES (?, ?, ?, ?)";
 
-    public HodRequest() {
+    private String username;
+    private String department;
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    HodRequest window = new HodRequest("username", "department");
+                    window.frmHodEventRequest.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public HodRequest(String username, String department) {
+        this.username = username;
+        this.department = department;
         initialize();
     }
 
@@ -48,8 +65,7 @@ public class HodRequest {
         JButton lblNewLabel_2 = new JButton("");
         lblNewLabel_2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
-                HodWindow hodWindow = new HodWindow();
+                HodWindow hodWindow = new HodWindow(username, department);
                 hodWindow.setVisible(true);
                 frmHodEventRequest.dispose();
             }
@@ -126,7 +142,7 @@ public class HodRequest {
 
                 // Validate the input
                 if (eventName.equals("")) {
-                    JOptionPane.showMessageDialog(frmHodEventRequest, "Please enter the event name.", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(frmHodEventRequest, "Please fill in all the fields.", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -134,9 +150,10 @@ public class HodRequest {
                 try {
                     Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
                     PreparedStatement statement = conn.prepareStatement(INSERT_QUERY);
-                    statement.setString(1, eventName);
-                    statement.setTimestamp(2, new java.sql.Timestamp(eventStart.getTime()));
-                    statement.setTimestamp(3, new java.sql.Timestamp(eventEnd.getTime()));
+                    statement.setString(1, department);
+                    statement.setString(2, eventName);
+                    statement.setTimestamp(3, new java.sql.Timestamp(eventStart.getTime()));
+                    statement.setTimestamp(4, new java.sql.Timestamp(eventEnd.getTime()));
                     statement.executeUpdate();
                     JOptionPane.showMessageDialog(frmHodEventRequest, "Event created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                     statement.close();
@@ -150,32 +167,11 @@ public class HodRequest {
 
         frmHodEventRequest.setBounds(100, 100, 977, 662);
         frmHodEventRequest.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frmHodEventRequest.setVisible(true);
     }
 
-    public void setVisible(boolean b) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public JFrame getCurrentFrame() {
-        return currentFrame;
-    }
-
-    public void setCurrentFrame(JFrame currentFrame) {
-        this.currentFrame = currentFrame;
-    }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    HodRequest window = new HodRequest();
-                    window.frmHodEventRequest.setVisible(true);
-                    window.setCurrentFrame(window.frmHodEventRequest); // Assign the current window to the field variable
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
 }

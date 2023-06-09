@@ -153,24 +153,27 @@ public class AdminEvents {
 
 		JButton btnApprove = new JButton("Approve");
 		btnApprove.addActionListener(new ActionListener() {
-			 public void actionPerformed(ActionEvent e) {
-			        // Check if any field is empty
-			        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
-			            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
-			            comboBox.getSelectedItem().toString().equals("Select Hall")) {
-			            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-			        } else {
-			            // Update hall and status in the events table
-			            updateHallAndStatus("Approved");
+			public void actionPerformed(ActionEvent e) {
+		        // Check if any field is empty
+		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
+		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
+		            comboBox.getSelectedItem().toString().equals("Select Hall")) {
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+		        } else {
+		            // Update hall and status in the events table
+		            updateHallAndStatus("Approved");
 
-			            // Refresh the JTable
-			            populateTable();
+		            // Remove the selected row from the JTable
+		            int selectedRow = table.getSelectedRow();
+		            if (selectedRow != -1) {
+		                DefaultTableModel model = (DefaultTableModel) table.getModel();
+		                model.removeRow(selectedRow);
+		            }
 
-			            JOptionPane.showMessageDialog(frmAdminEvents, "Event approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-			            clearFields();
-			        }
-			    }
-
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Event approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		            clearFields();
+		        }
+		    }
 			    private void updateHallAndStatus(String status) {
 			        int selectedRow = table.getSelectedRow();
 			        if (selectedRow != -1) {
@@ -218,19 +221,21 @@ public class AdminEvents {
 
 		JButton btnDeny = new JButton("Deny");
 		btnDeny.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Check if any of the fields are empty
-		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty()
-		                || textField_4.getText().isEmpty() || textField_6.getText().isEmpty()
-		                || comboBox.getSelectedItem() == null) {
-		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error",
-		                    JOptionPane.ERROR_MESSAGE);
+			public void actionPerformed(ActionEvent e) {
+		        // Check if any field is empty
+		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
+		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty()) {
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
 		        } else {
 		            // Update status in the events table
 		            updateStatus("Denied");
 
-		            // Refresh the JTable
-		            populateTable();
+		            // Remove the selected row from the JTable
+		            int selectedRow = table.getSelectedRow();
+		            if (selectedRow != -1) {
+		                DefaultTableModel model = (DefaultTableModel) table.getModel();
+		                model.removeRow(selectedRow);
+		            }
 
 		            JOptionPane.showMessageDialog(frmAdminEvents, "Event denied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 		            clearFields();

@@ -40,7 +40,8 @@ public class HodWindow {
         initialize();
     }
 
-    private String fetchDepartment(String username) {
+    
+	private String fetchDepartment(String username) {
         String department = "";
         try {
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ess", "root", "system");

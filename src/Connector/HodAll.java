@@ -13,6 +13,10 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class HodAll extends JFrame {
 
@@ -59,6 +63,18 @@ public class HodAll extends JFrame {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(194, 281, 628, 267);
         contentPane.add(scrollPane);
+        
+        JButton btnNewButton = new JButton("");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		 HodWindow hodWindow = new HodWindow(department, department);
+        	        hodWindow.setVisible(true);
+        	        dispose();
+        	}
+        });
+        btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
+        btnNewButton.setBounds(123, 112, 105, 81);
+        contentPane.add(btnNewButton);
 
         // Call the method to load requests
         loadRequests();

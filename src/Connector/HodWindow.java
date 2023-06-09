@@ -96,6 +96,19 @@ public class HodWindow {
         frame.getContentPane().add(btnCreateRequest);
 
         JButton btnViewAllEvents = new JButton("Pending Requests");
+        btnViewAllEvents.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		HodAll hodall = new HodAll(username, username, department);
+        		hodall.setVisible(true);
+        		dispose();
+        	}
+
+			private void dispose() {
+				// TODO Auto-generated method stub
+				
+			}
+        });
         btnViewAllEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
         btnViewAllEvents.setBounds(456, 312, 223, 86);
         frame.getContentPane().add(btnViewAllEvents);

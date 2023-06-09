@@ -178,8 +178,28 @@ public class Reg1 extends JFrame {
         contentPane.add(rdbtnNewRadioButton_11);
         rdbtnNewRadioButton_11.setFont(new Font("Tahoma", Font.PLAIN, 15));
         radioButtonGroup.add(rdbtnNewRadioButton_11);
+        
+     // Add ActionListener to the admin radio button
+        rdbtnNewRadioButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Disable the department drop-down menu
+                departmentComboBox.setEnabled(false);
+            }
+        });
 
-        // Action listener for sign up button
+        // Add ActionListener to the HOD radio button
+        rdbtnNewRadioButton_1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                // Enable the department drop-down menu
+                departmentComboBox.setEnabled(true);
+            }
+        });
+
+
+
+
+        
+        
         btnSignUp.addActionListener(e -> {
             // Retrieve the values from the fields
             String username = textField.getText();
@@ -190,8 +210,7 @@ public class Reg1 extends JFrame {
             String userType = rdbtnNewRadioButton.isSelected() ? "ADMIN" : "HOD"; // Determine the selected user type
 
             // Validate the data
-            if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()
-                    || department.equals("Select a Department")) {
+            if (username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() || email.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please fill in all the fields!");
             } else if (!password.equals(confirmPassword)) {
                 JOptionPane.showMessageDialog(null, "Passwords do not match!");
@@ -205,6 +224,8 @@ public class Reg1 extends JFrame {
                 }
             }
         });
+
+
 
         departmentComboBox.addItem("Civil");
         departmentComboBox.addItem("ECE");
@@ -224,7 +245,12 @@ public class Reg1 extends JFrame {
         });
     }
 
-    /**
+    private boolean checkExistingUser(String username, String email) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
      * Save the registration data to the database.
      */
     private void saveToDatabase(String username, String password, String email, String department, String userType) {
@@ -233,18 +259,35 @@ public class Reg1 extends JFrame {
             Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
 
             // Create a prepared statement with an SQL query
-            String query = "INSERT INTO reg (username, password, email, department, userType) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement statement = conn.prepareStatement(query);
+            String query;
+            PreparedStatement statement;
 
-            // Set the parameter values in the prepared statement
-            statement.setString(1, username);
-            statement.setString(2, password);
-            statement.setString(3, email);
-            statement.setString(4, department);
-            statement.setString(5, userType);
+            if (userType.equals("ADMIN")) {
+                // If Admin, exclude department information
+                query = "INSERT INTO reg (username, password, email, userType) VALUES (?, ?, ?, ?)";
+                statement = conn.prepareStatement(query);
+
+                // Set the parameter values in the prepared statement
+                statement.setString(1, username);
+                statement.setString(2, password);
+                statement.setString(3, email);
+                statement.setString(4, userType);
+            } else {
+                // If HOD, include department information
+                query = "INSERT INTO reg (username, password, email, department, userType) VALUES (?, ?, ?, ?, ?)";
+                statement = conn.prepareStatement(query);
+
+                // Set the parameter values in the prepared statement
+                statement.setString(1, username);
+                statement.setString(2, password);
+                statement.setString(3, email);
+                statement.setString(4, department);
+                statement.setString(5, userType);
+            }
 
             // Execute the SQL query
             statement.executeUpdate();
+
 
             // Close the connection and statement
             statement.close();
@@ -256,42 +299,5 @@ public class Reg1 extends JFrame {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error: Failed to save data to the database!");
         }
-    }
-
-    /**
-     * Check if the username or email already exists in the database.
-     */
-    private boolean checkExistingUser(String username, String email) {
-        try {
-            // Establish a connection to the database
-            Connection conn = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-
-            // Create a prepared statement with an SQL query
-            String query = "SELECT * FROM reg WHERE username = ? OR email = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
-
-            // Set the parameter values in the prepared statement
-            statement.setString(1, username);
-            statement.setString(2, email);
-
-            // Execute the SQL query and get the result set
-            ResultSet resultSet = statement.executeQuery();
-
-            // Check if the result set has any rows
-            boolean exists = resultSet.next();
-
-            // Close the connection, statement, and result set
-            resultSet.close();
-            statement.close();
-            conn.close();
-
-            // Return true if the username or email already exists, false otherwise
-            return exists;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: Failed to check existing user!");
-        }
-
-        return false;
     }
 }

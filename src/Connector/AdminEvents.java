@@ -40,8 +40,6 @@ public class AdminEvents {
 
 	private Connection connection;
 	private DefaultTableModel tableModel;
-	private JComboBox<Object> comboBox;
-
 	/**
 	 * Launch the application.
 	 */
@@ -147,9 +145,6 @@ public class AdminEvents {
 		comboBox.setModel(new DefaultComboBoxModel<Object>(new String[] {"Select Hall", "MINI HALL", "LOMA HALL", "DHWANI HALL", "MAIN HALL", "CONFERENCE HALL"}));
 		comboBox.setBounds(158, 409, 205, 22);
 		frmAdminEvents.getContentPane().add(comboBox);
-
-		// Assign the comboBox object to the class member variable
-		this.comboBox = comboBox;
 
 		JButton btnApprove = new JButton("Approve");
 		btnApprove.addActionListener(new ActionListener() {

@@ -101,13 +101,8 @@ public class HodWindow {
         		
         		HodAll hodall = new HodAll(username, username, department);
         		hodall.setVisible(true);
-        		dispose();
+        		frame.dispose();
         	}
-
-			private void dispose() {
-				// TODO Auto-generated method stub
-				
-			}
         });
         btnViewAllEvents.setFont(new Font("Tahoma", Font.PLAIN, 20));
         btnViewAllEvents.setBounds(456, 312, 223, 86);

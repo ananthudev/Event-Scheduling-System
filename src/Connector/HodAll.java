@@ -1,6 +1,5 @@
 package Connector;
 
-import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.Connection;
@@ -17,33 +16,15 @@ import javax.swing.table.DefaultTableModel;
 
 public class HodAll extends JFrame {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+    private static final long serialVersionUID = 1L;
+    private JPanel contentPane;
     private JTable table;
+    private String username;
+    private String department;
 
-    /**
-     * Launch the application.
-     */
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    HodAll frame = new HodAll();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    /**
-     * Create the frame.
-     */
-    public HodAll() {
+    public HodAll(String username, String department2, String department) {
+        this.username = username;
+        this.department = department;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 992, 757);
         contentPane = new JPanel();
@@ -51,6 +32,18 @@ public class HodAll extends JFrame {
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
+
+        JLabel lblUserInfo = new JLabel("Username: " + this.username);
+        lblUserInfo.setForeground(Color.WHITE);
+        lblUserInfo.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblUserInfo.setBounds(50, 10, 500, 25);
+        contentPane.add(lblUserInfo);
+
+        JLabel lblDepartment = new JLabel("Department: " + this.department);
+        lblDepartment.setForeground(Color.WHITE);
+        lblDepartment.setFont(new Font("Tahoma", Font.PLAIN, 18));
+        lblDepartment.setBounds(50, 50, 500, 25);
+        contentPane.add(lblDepartment);
 
         JLabel lblNewLabel = new JLabel("Pending Requests");
         lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 31));
@@ -60,13 +53,9 @@ public class HodAll extends JFrame {
         table = new JTable();
         table.setModel(new DefaultTableModel(
                 new Object[][] {},
-                new String[] { "Event Name", "Event Start", "Event End", "Status" }
+                new String[] { "Department", "Event Name", "Event Start", "Event End", "Status" }
         ));
-        table.getColumnModel().getColumn(0).setPreferredWidth(200);
-        table.getColumnModel().getColumn(1).setPreferredWidth(150);
-        table.getColumnModel().getColumn(2).setPreferredWidth(150);
-        table.getColumnModel().getColumn(3).setPreferredWidth(100);
-        
+
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setBounds(194, 281, 628, 267);
         contentPane.add(scrollPane);
@@ -77,60 +66,52 @@ public class HodAll extends JFrame {
 
     private void loadRequests() {
         try {
-            // Retrieve user's department based on login credentials
-            String username = "username";
-            String password = "password";
-            String department = getDepartment(username, password);
-
-            // Fetch requests from the events table for the user's department
             Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ess", "root", "system");
-            String sql = "SELECT eventname, eventstart, eventend, status FROM events WHERE department = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, department);
-            ResultSet rs = stmt.executeQuery();
 
-            // Populate the table with the fetched request data
+            // Fetch all departments from the reg table
+            String departmentsQuery = "SELECT DISTINCT department FROM reg";
+            PreparedStatement departmentsStmt = conn.prepareStatement(departmentsQuery);
+            ResultSet departmentsRs = departmentsStmt.executeQuery();
+
+            // Clear the table model before populating
             DefaultTableModel model = (DefaultTableModel) table.getModel();
-            while (rs.next()) {
-                String eventName = rs.getString("eventname");
-                String eventStart = rs.getString("eventstart");
-                String eventEnd = rs.getString("eventend");
-                String status = rs.getString("status");
-                model.addRow(new Object[] { eventName, eventStart, eventEnd, status });
+            model.setRowCount(0);
+
+            // Fetch requests for each department and populate the table
+            while (departmentsRs.next()) {
+                String department = departmentsRs.getString("department");
+                String sql = "SELECT department, eventname, eventstart, eventend, status FROM events WHERE department = ?";
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                stmt.setString(1, department);
+                ResultSet rs = stmt.executeQuery();
+
+                // Populate the table with the fetched request data for the current department
+                while (rs.next()) {
+                    String eventName = rs.getString("eventname");
+                    String eventStart = rs.getString("eventstart");
+                    String eventEnd = rs.getString("eventend");
+                    String status = rs.getString("status");
+                    model.addRow(new Object[] { department, eventName, eventStart, eventEnd, status });
+                }
+
+                // Close the ResultSet and PreparedStatement for the current department
+                rs.close();
+                stmt.close();
             }
 
-            // Close the database connections
-            rs.close();
-            stmt.close();
+            // Close the ResultSet, PreparedStatement, and Connection for departments
+            departmentsRs.close();
+            departmentsStmt.close();
             conn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private String getDepartment(String username, String password) {
-        String department = "";
-        try {
-            // Fetch user's department based on login credentials from the reg table
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/ess", "root", "system");
-            String sql = "SELECT department FROM reg WHERE username = ? AND password = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            ResultSet rs = stmt.executeQuery();
-
-            // Retrieve the department
-            if (rs.next()) {
-                department = rs.getString("department");
-            }
-
-            // Close the database connections
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return department;
+    public static void main(String[] args) {
+        String username = "your_username"; // Replace with the actual username
+        String department = "your_department"; // Replace with the actual department
+        HodAll hodAll = new HodAll(username, department, department);
+        hodAll.setVisible(true);
     }
 }

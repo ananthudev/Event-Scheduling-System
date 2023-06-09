@@ -153,18 +153,64 @@ public class AdminEvents {
 
 		JButton btnApprove = new JButton("Approve");
 		btnApprove.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Check if any field is empty
-		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
-		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
-		            comboBox.getSelectedItem().toString().equals("Select Hall")) {
-		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-		        } else {
-		            updateStatus("Approved");
-		            JOptionPane.showMessageDialog(frmAdminEvents, "Event approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-		        }
-		    }
-		});
+			 public void actionPerformed(ActionEvent e) {
+			        // Check if any field is empty
+			        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
+			            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
+			            comboBox.getSelectedItem().toString().equals("Select Hall")) {
+			            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+			        } else {
+			            // Update hall and status in the events table
+			            updateHallAndStatus("Approved");
+
+			            // Refresh the JTable
+			            populateTable();
+
+			            JOptionPane.showMessageDialog(frmAdminEvents, "Event approved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+			            clearFields();
+			        }
+			    }
+
+			    private void updateHallAndStatus(String status) {
+			        int selectedRow = table.getSelectedRow();
+			        if (selectedRow != -1) {
+			            String department = table.getValueAt(selectedRow, 0).toString();
+			            String eventName = table.getValueAt(selectedRow, 1).toString();
+			            String eventStart = table.getValueAt(selectedRow, 2).toString();
+			            String eventEnd = table.getValueAt(selectedRow, 3).toString();
+			            String hall = comboBox.getSelectedItem().toString();
+			            
+			            try {
+			                PreparedStatement stmt = connection.prepareStatement("UPDATE events SET status = ?, hall = ? WHERE department = ? AND eventname = ? AND eventstart = ? AND eventend = ?");
+			                stmt.setString(1, status);
+			                stmt.setString(2, hall);
+			                stmt.setString(3, department);
+			                stmt.setString(4, eventName);
+			                stmt.setString(5, eventStart);
+			                stmt.setString(6, eventEnd);
+			                
+			                int rowsUpdated = stmt.executeUpdate();
+			                if (rowsUpdated > 0) {
+			                    JOptionPane.showMessageDialog(frmAdminEvents, "Hall and status updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+			                } else {
+			                    JOptionPane.showMessageDialog(frmAdminEvents, "Failed to update hall and status", "Error", JOptionPane.ERROR_MESSAGE);
+			                }
+			            } catch (SQLException ex) {
+			                ex.printStackTrace();
+			                JOptionPane.showMessageDialog(frmAdminEvents, "An error occurred while updating hall and status", "Error", JOptionPane.ERROR_MESSAGE);
+			            }
+			        }
+			    }
+
+			    private void clearFields() {
+			        textField.setText("");
+			        textField_2.setText("");
+			        textField_4.setText("");
+			        textField_6.setText("");
+			        comboBox.setSelectedIndex(0);
+			    }
+			});
+
 		btnApprove.setForeground(new Color(0, 0, 0));
 		btnApprove.setBackground(new Color(255, 255, 255));
 		btnApprove.setBounds(92, 478, 100, 32);
@@ -172,9 +218,7 @@ public class AdminEvents {
 
 		JButton btnDeny = new JButton("Deny");
 		btnDeny.addActionListener(new ActionListener() {
-			
-
-			public void actionPerformed(ActionEvent e) {
+		    public void actionPerformed(ActionEvent e) {
 		        // Check if any of the fields are empty
 		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty()
 		                || textField_4.getText().isEmpty() || textField_6.getText().isEmpty()
@@ -182,57 +226,60 @@ public class AdminEvents {
 		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error",
 		                    JOptionPane.ERROR_MESSAGE);
 		        } else {
-		            // Save the data to the database
-		            String department = textField.getText();
-		            String eventName = textField_2.getText();
-		            String eventstart = textField_4.getText();
-		            String eventend = textField_6.getText();
-		            String hall = comboBox.getSelectedItem().toString();
+		            // Update status in the events table
+		            updateStatus("Denied");
+
+		            // Refresh the JTable
+		            populateTable();
+
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Event denied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		            clearFields();
+		        }
+		    }
+
+		    private void updateStatus(String status) {
+		        int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		            String department = table.getValueAt(selectedRow, 0).toString();
+		            String eventName = table.getValueAt(selectedRow, 1).toString();
+		            String eventStart = table.getValueAt(selectedRow, 2).toString();
+		            String eventEnd = table.getValueAt(selectedRow, 3).toString();
+		            String hall = "";
+
+		            if (status.equals("Approved")) {
+		                hall = comboBox.getSelectedItem().toString();
+		            }
 
 		            try {
-		                // Create a PreparedStatement to insert the data into the events table
-		                PreparedStatement stmt = connection.prepareStatement(
-		                        "INSERT INTO events (department, eventName, eventstart, eventend, hall) VALUES (?, ?, ?, ?, ?)");
-		                stmt.setString(1, department);
-		                stmt.setString(2, eventName);
-		                stmt.setString(3, eventstart);
-		                stmt.setString(4, eventend);
-		                stmt.setString(5, hall);
+		                PreparedStatement stmt = connection.prepareStatement("UPDATE events SET status = ?, hall = ? WHERE department = ? AND eventname = ? AND eventstart = ? AND eventend = ?");
+		                stmt.setString(1, status);
+		                stmt.setString(2, hall);
+		                stmt.setString(3, department);
+		                stmt.setString(4, eventName);
+		                stmt.setString(5, eventStart);
+		                stmt.setString(6, eventEnd);
 
-		                // Execute the query
-		                int rowsInserted = stmt.executeUpdate();
-		                if (rowsInserted > 0) {
-		                    JOptionPane.showMessageDialog(frmAdminEvents, "Event Denied Successfully");
-		                    clearFields();
-		                    populateTable();
+		                int rowsUpdated = stmt.executeUpdate();
+		                if (rowsUpdated > 0) {
+		                    JOptionPane.showMessageDialog(frmAdminEvents, "Status updated successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
 		                } else {
-		                    JOptionPane.showMessageDialog(frmAdminEvents, "Failed to save event", "Error",
-		                            JOptionPane.ERROR_MESSAGE);
+		                    JOptionPane.showMessageDialog(frmAdminEvents, "Failed to update status", "Error", JOptionPane.ERROR_MESSAGE);
 		                }
 		            } catch (SQLException ex) {
 		                ex.printStackTrace();
-		                JOptionPane.showMessageDialog(frmAdminEvents, "An error occurred", "Error",
-		                        JOptionPane.ERROR_MESSAGE);
+		                JOptionPane.showMessageDialog(frmAdminEvents, "An error occurred while updating status", "Error", JOptionPane.ERROR_MESSAGE);
 		            }
 		        }
 		    }
+
+
+
 
 			private void clearFields() {
 				// TODO Auto-generated method stub
 				
 			}
 		});
-		
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -351,42 +398,7 @@ public class AdminEvents {
 	}
 
 
-	private void updateStatus(String status) {
-	    try {
-	        int selectedRow = table.getSelectedRow();
-	        if (selectedRow != -1) {
-	            String eventName = table.getValueAt(selectedRow, 1).toString();
-
-	            // Validate fields
-	            String department = textField.getText();
-	            String eventStart = textField_2.getText();
-	            String eventEnd = textField_4.getText();
-	            String hall = comboBox.getSelectedItem().toString();
-
-	            if (department.isEmpty() || eventName.isEmpty() || eventStart.isEmpty() || eventEnd.isEmpty() || hall.equals("Select Hall")) {
-	                JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
-	                return;
-	            }
-
-	            String query = "UPDATE events SET status = ?, hall = ? WHERE eventname = ?";
-	            PreparedStatement statement = connection.prepareStatement(query);
-	            statement.setString(1, status);
-	            statement.setString(2, hall);
-	            statement.setString(3, eventName);
-	            statement.executeUpdate();
-
-	            statement.close();
-
-	            // Remove the selected row from the table
-	            tableModel.removeRow(selectedRow);
-
-	            // Deselect any row in the table
-	            table.clearSelection();
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
-	}
+	
 
 	public void setVisible(boolean b) {
 		// TODO Auto-generated method stub

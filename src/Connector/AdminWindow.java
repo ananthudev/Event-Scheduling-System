@@ -76,7 +76,7 @@ public class AdminWindow {
         btnNewButton_1.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		
-        		login login = new login();
+        		Login login = new Login();
                 login.setVisible(true);
                 frame.dispose();
         	}

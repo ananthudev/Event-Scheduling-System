@@ -78,7 +78,7 @@ public class Reg1 extends JFrame {
         btnLogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 // Redirect to the Login.java page
-                login login = new login();
+                Login login = new Login();
                 login.setVisible(true);
                 dispose(); // Close the current registration frame
             }
@@ -150,8 +150,6 @@ public class Reg1 extends JFrame {
 
         // Button to perform sign up
         JButton btnSignUp = new JButton("Sign Up");
-       
-        
         btnSignUp.setForeground(new Color(255, 255, 255));
         btnSignUp.setBackground(new Color(0, 128, 255));
         contentPane.add(btnSignUp);
@@ -174,7 +172,7 @@ public class Reg1 extends JFrame {
         rdbtnNewRadioButton.setBounds(242, 192, 111, 23);
         backgroundLabel.add(rdbtnNewRadioButton);
         radioButtonGroup.add(rdbtnNewRadioButton);
-        
+
         JRadioButton rdbtnNewRadioButton_11 = new JRadioButton("HOD");
         rdbtnNewRadioButton_11.setBounds(421, 191, 111, 23);
         contentPane.add(rdbtnNewRadioButton_11);
@@ -279,19 +277,21 @@ public class Reg1 extends JFrame {
             // Execute the SQL query and get the result set
             ResultSet resultSet = statement.executeQuery();
 
-            // Check if any rows are returned
-            boolean existingUser = resultSet.next();
+            // Check if the result set has any rows
+            boolean exists = resultSet.next();
 
             // Close the connection, statement, and result set
             resultSet.close();
             statement.close();
             conn.close();
 
-            return existingUser;
+            // Return true if the username or email already exists, false otherwise
+            return exists;
         } catch (SQLException ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Error: Failed to retrieve data from the database!");
-            return false;
+            JOptionPane.showMessageDialog(null, "Error: Failed to check existing user!");
         }
+
+        return false;
     }
 }

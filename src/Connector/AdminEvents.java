@@ -6,6 +6,8 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Window;
+
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -324,12 +326,22 @@ public class AdminEvents {
 		
 		JButton btnNewButton = new JButton("");
 		btnNewButton.addActionListener(new ActionListener() {
+			@SuppressWarnings("unused")
+			private Window frame;
+
 			public void actionPerformed(ActionEvent e) {
+				btnNewButton.addActionListener(new ActionListener() {
+				    public void actionPerformed(ActionEvent e) {
+				        AdminWindow adminWindow = new AdminWindow();
+				        adminWindow.setVisible(true);
+				        frmAdminEvents.dispose(); // Dispose the current window
+				    }
+				});
+    	}
 				
-				
-			}
+			
 		});
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
 		btnNewButton.setBounds(55, 69, 105, 81);
 		frmAdminEvents.getContentPane().add(btnNewButton);
@@ -392,7 +404,7 @@ public class AdminEvents {
 			}
 
 			statement.close();
-		} catch (SQLException e) {
+		} catch (SQLException e) {	
 			e.printStackTrace();
 		}
 	}

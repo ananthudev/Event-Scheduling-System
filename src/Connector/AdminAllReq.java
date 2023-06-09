@@ -2,6 +2,7 @@ package Connector;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.Window;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -87,6 +88,31 @@ public class AdminAllReq extends JFrame {
             }
         });
         contentPane.add(btnRefresh);
+        
+        JButton btnNewButton = new JButton("");
+        btnNewButton.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		btnNewButton.addActionListener(new ActionListener() {
+        		    private Window frmAdminEvents;
+
+					public void actionPerformed(ActionEvent e) {
+        		        AdminWindow adminWindow = new AdminWindow();
+        		        adminWindow.setVisible(true);
+        		        frmAdminEvents.dispose(); // Dispose the current window
+        		    }
+        		});
+        	}
+        });
+        btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
+        btnNewButton.setBounds(58, 67, 105, 81);
+        contentPane.add(btnNewButton);
+        
+        JLabel lblNewLabel = new JLabel("All Approved and Denied Requests");
+        lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 28));
+        lblNewLabel.setForeground(new Color(255, 255, 255));
+        lblNewLabel.setBounds(257, 142, 488, 51);
+        contentPane.add(lblNewLabel);
 
         populateTable(); // Populate the table initially
     }

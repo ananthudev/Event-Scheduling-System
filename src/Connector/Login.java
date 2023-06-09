@@ -26,52 +26,52 @@ public class Login extends JFrame {
 
     private void initialize() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 874, 703);
+        setBounds(100, 100, 992, 758);
         getContentPane().setLayout(null);
 
         JLabel lblNewLabel_1 = new JLabel("Login");
         lblNewLabel_1.setForeground(new Color(255, 255, 255));
-        lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 46));
-        lblNewLabel_1.setBounds(335, 126, 159, 56);
+        lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 46));
+        lblNewLabel_1.setBounds(452, 149, 159, 56);
         getContentPane().add(lblNewLabel_1);
 
         JLabel lblNewLabel_2 = new JLabel("Username");
         lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
         lblNewLabel_2.setForeground(new Color(255, 255, 255));
-        lblNewLabel_2.setBounds(282, 259, 116, 35);
+        lblNewLabel_2.setBounds(343, 259, 116, 35);
         getContentPane().add(lblNewLabel_2);
 
         textField_2 = new JTextField();
-        textField_2.setBounds(392, 269, 132, 20);
+        textField_2.setBounds(507, 270, 132, 20);
         getContentPane().add(textField_2);
         textField_2.setColumns(10);
 
         JLabel lblNewLabel_2_1 = new JLabel("Password");
         lblNewLabel_2_1.setForeground(Color.WHITE);
         lblNewLabel_2_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_2_1.setBounds(282, 310, 116, 35);
+        lblNewLabel_2_1.setBounds(343, 304, 116, 35);
         getContentPane().add(lblNewLabel_2_1);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(392, 320, 132, 20);
+        passwordField.setBounds(507, 321, 132, 20);
         getContentPane().add(passwordField);
 
         JLabel lblNewLabel_3 = new JLabel("User Type");
         lblNewLabel_3.setForeground(Color.WHITE);
         lblNewLabel_3.setFont(new Font("Tahoma", Font.PLAIN, 18));
-        lblNewLabel_3.setBounds(282, 361, 116, 35);
+        lblNewLabel_3.setBounds(343, 361, 116, 35);
         getContentPane().add(lblNewLabel_3);
 
         rdbtnNewRadioButton = new JRadioButton("Admin");
         rdbtnNewRadioButton.setForeground(new Color(0, 0, 0));
         rdbtnNewRadioButton.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        rdbtnNewRadioButton.setBounds(392, 371, 73, 23);
+        rdbtnNewRadioButton.setBounds(479, 368, 73, 23);
         getContentPane().add(rdbtnNewRadioButton);
 
         rdbtnNewRadioButton_1 = new JRadioButton("HOD");
         rdbtnNewRadioButton_1.setForeground(new Color(0, 0, 0));
         rdbtnNewRadioButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        rdbtnNewRadioButton_1.setBounds(479, 371, 73, 23);
+        rdbtnNewRadioButton_1.setBounds(582, 368, 73, 23);
         getContentPane().add(rdbtnNewRadioButton_1);
 
         ButtonGroup userTypeGroup = new ButtonGroup();
@@ -133,7 +133,7 @@ public class Login extends JFrame {
             }
         });
 
-        btnNewButton.setBounds(376, 428, 89, 23);
+        btnNewButton.setBounds(522, 456, 89, 23);
         getContentPane().add(btnNewButton);
 
         getContentPane().setBackground(new Color(255, 255, 255));
@@ -141,22 +141,25 @@ public class Login extends JFrame {
         JButton btnNewButton_1 = new JButton("Register");
         btnNewButton_1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	Reg1 reg1 = new Reg1();
+				reg1.setVisible(true);
+				dispose();
 
 
             }
         });
         btnNewButton_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnNewButton_1.setBounds(248, 428, 89, 23);
+        btnNewButton_1.setBounds(343, 456, 89, 23);
         getContentPane().add(btnNewButton_1);
 
         JButton btnReset = new JButton("Reset");
         btnReset.setFont(new Font("Tahoma", Font.PLAIN, 14));
-        btnReset.setBounds(497, 430, 89, 23);
+        btnReset.setBounds(684, 456, 89, 23);
         getContentPane().add(btnReset);
 
         JLabel lblNewLabel = new JLabel("New label");
         lblNewLabel.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\edward-unsplash-blur.jpg"));
-        lblNewLabel.setBounds(0, 0, 860, 666);
+        lblNewLabel.setBounds(0, 0, 978, 721);
         getContentPane().add(lblNewLabel);
     }
 

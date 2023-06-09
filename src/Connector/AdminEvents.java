@@ -6,18 +6,12 @@ import javax.swing.JFrame;
 import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.Font;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
-import java.awt.Component;
 import javax.swing.JTable;
-import javax.swing.border.TitledBorder;
 import javax.swing.border.BevelBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.sql.Connection;
@@ -33,6 +27,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ListSelectionModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Cursor;
 
 public class AdminEvents {
 
@@ -45,24 +40,23 @@ public class AdminEvents {
 
 	private Connection connection;
 	private DefaultTableModel tableModel;
-	private JButton btnDelete;
 	private JComboBox<Object> comboBox;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					AdminEvents window = new AdminEvents();
-					window.frmAdminEvents.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    AdminEvents window = new AdminEvents();
+                    window.frmAdminEvents.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
 	/**
 	 * Create the application.
@@ -86,7 +80,7 @@ public class AdminEvents {
 		JLabel lblAdminEvents = new JLabel("Admin Events");
 		lblAdminEvents.setForeground(Color.WHITE);
 		lblAdminEvents.setFont(new Font("Tahoma", Font.PLAIN, 38));
-		lblAdminEvents.setBounds(299, 95, 283, 43);
+		lblAdminEvents.setBounds(303, 129, 283, 43);
 		frmAdminEvents.getContentPane().add(lblAdminEvents);
 		tableModel = new DefaultTableModel(
 			new Object[][] {},
@@ -178,18 +172,70 @@ public class AdminEvents {
 
 		JButton btnDeny = new JButton("Deny");
 		btnDeny.addActionListener(new ActionListener() {
-		    public void actionPerformed(ActionEvent e) {
-		        // Check if any field is empty
-		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty() ||
-		            textField_4.getText().isEmpty() || textField_6.getText().isEmpty() ||
-		            comboBox.getSelectedItem().toString().equals("Select Hall")) {
-		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error", JOptionPane.ERROR_MESSAGE);
+			
+
+			public void actionPerformed(ActionEvent e) {
+		        // Check if any of the fields are empty
+		        if (textField.getText().isEmpty() || textField_2.getText().isEmpty()
+		                || textField_4.getText().isEmpty() || textField_6.getText().isEmpty()
+		                || comboBox.getSelectedItem() == null) {
+		            JOptionPane.showMessageDialog(frmAdminEvents, "Please fill in all fields", "Error",
+		                    JOptionPane.ERROR_MESSAGE);
 		        } else {
-		            updateStatus("Denied");
-		            JOptionPane.showMessageDialog(frmAdminEvents, "Event denied successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+		            // Save the data to the database
+		            String department = textField.getText();
+		            String eventName = textField_2.getText();
+		            String eventstart = textField_4.getText();
+		            String eventend = textField_6.getText();
+		            String hall = comboBox.getSelectedItem().toString();
+
+		            try {
+		                // Create a PreparedStatement to insert the data into the events table
+		                PreparedStatement stmt = connection.prepareStatement(
+		                        "INSERT INTO events (department, eventName, eventstart, eventend, hall) VALUES (?, ?, ?, ?, ?)");
+		                stmt.setString(1, department);
+		                stmt.setString(2, eventName);
+		                stmt.setString(3, eventstart);
+		                stmt.setString(4, eventend);
+		                stmt.setString(5, hall);
+
+		                // Execute the query
+		                int rowsInserted = stmt.executeUpdate();
+		                if (rowsInserted > 0) {
+		                    JOptionPane.showMessageDialog(frmAdminEvents, "Event Denied Successfully");
+		                    clearFields();
+		                    populateTable();
+		                } else {
+		                    JOptionPane.showMessageDialog(frmAdminEvents, "Failed to save event", "Error",
+		                            JOptionPane.ERROR_MESSAGE);
+		                }
+		            } catch (SQLException ex) {
+		                ex.printStackTrace();
+		                JOptionPane.showMessageDialog(frmAdminEvents, "An error occurred", "Error",
+		                        JOptionPane.ERROR_MESSAGE);
+		            }
 		        }
 		    }
+
+			private void clearFields() {
+				// TODO Auto-generated method stub
+				
+			}
 		});
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
 		btnDeny.setForeground(new Color(0, 0, 0));
 		btnDeny.setBackground(new Color(255, 255, 255));
 		btnDeny.setBounds(204, 478, 100, 32);
@@ -228,19 +274,31 @@ public class AdminEvents {
 		JScrollPane scrollPane1 = new JScrollPane(table);
 		scrollPane1.setBounds(398, 244, 494, 162);
 		frmAdminEvents.getContentPane().add(scrollPane1);
+		
+		JButton btnNewButton = new JButton("");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+			}
+		});
+		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+		btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
+		btnNewButton.setBounds(55, 69, 105, 81);
+		frmAdminEvents.getContentPane().add(btnNewButton);
 
 		table.getSelectionModel().addListSelectionListener(e -> {
 			int selectedRow = table.getSelectedRow();
 			if (selectedRow != -1) {
 				String department = table.getValueAt(selectedRow, 0) != null ? table.getValueAt(selectedRow, 0).toString() : "";
 				String eventName = table.getValueAt(selectedRow, 1) != null ? table.getValueAt(selectedRow, 1).toString() : "";
-				String startTime = table.getValueAt(selectedRow, 2) != null ? table.getValueAt(selectedRow, 2).toString() : "";
-				String endTime = table.getValueAt(selectedRow, 3) != null ? table.getValueAt(selectedRow, 3).toString() : "";
+				String eventStart = table.getValueAt(selectedRow, 2) != null ? table.getValueAt(selectedRow, 2).toString() : "";
+				String eventEnd = table.getValueAt(selectedRow, 3) != null ? table.getValueAt(selectedRow, 3).toString() : "";
 
 				textField.setText(department);
 				textField_2.setText(eventName);
-				textField_4.setText(startTime);
-				textField_6.setText(endTime);
+				textField_4.setText(eventStart);
+				textField_6.setText(eventEnd);
 				comboBox.setSelectedIndex(0);
 			}
 		});
@@ -330,8 +388,12 @@ public class AdminEvents {
 	    }
 	}
 
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
 	}
 
+	}
 
 
 

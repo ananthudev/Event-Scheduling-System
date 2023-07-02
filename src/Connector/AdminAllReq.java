@@ -44,9 +44,14 @@ public class AdminAllReq extends JFrame {
             }
         });
     }
+    
+    
+ 
 
-    public AdminAllReq() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public AdminAllReq()
+    {
+    	
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 992, 757);
         contentPane = new JPanel();
         contentPane.setBackground(new Color(0, 128, 128));
@@ -94,18 +99,16 @@ public class AdminAllReq extends JFrame {
         	public void actionPerformed(ActionEvent e) {
         		
         		btnNewButton.addActionListener(new ActionListener() {
-        		    private Window frmAdminEvents;
-
-					public void actionPerformed(ActionEvent e) {
+        		    public void actionPerformed(ActionEvent e) {
         		        AdminWindow adminWindow = new AdminWindow();
         		        adminWindow.setVisible(true);
-        		        frmAdminEvents.dispose(); // Dispose the current window
+        		        dispose(); // Dispose the current window
         		    }
         		});
         	}
         });
         btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
-        btnNewButton.setBounds(58, 67, 105, 81);
+        btnNewButton.setBounds(57, 61, 105, 81);
         contentPane.add(btnNewButton);
         
         JLabel lblNewLabel = new JLabel("All Approved and Denied Requests");

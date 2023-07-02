@@ -83,7 +83,7 @@ public class Home extends JFrame {
 		btnNewButton.setBounds(205, 355, 179, 98);
 		contentPane.add(btnNewButton);
 		
-		JLabel lblNewLabel_1 = new JLabel("Welcome to E-EVENTPLAN, the ultimate desktop application for event planning and management, approved by administrators.");
+		JLabel lblNewLabel_1 = new JLabel("Welcome to E-EVENTPLAN, the Ultimate desktop application for event planning and management, approved by administrators.");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblNewLabel_1.setBounds(40, 147, 1105, 32);
 		contentPane.add(lblNewLabel_1);
@@ -103,7 +103,7 @@ public class Home extends JFrame {
 		
 		JLabel lblNewLabel_4 = new JLabel(" Whether you're a professional event planner or an individual looking to host a gathering, E-EVENTPLAN has got you covered.");
 		lblNewLabel_4.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblNewLabel_4.setBounds(38, 216, 940, 14);
+		lblNewLabel_4.setBounds(38, 216, 940, 25);
 		contentPane.add(lblNewLabel_4);
 		
 		JLabel lblNewLabel = new JLabel("");

@@ -343,7 +343,7 @@ public class AdminEvents {
 		});
 		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNewButton.setIcon(new ImageIcon("H:\\ESS\\Event-Scheduling-System\\image\\home.png"));
-		btnNewButton.setBounds(55, 69, 105, 81);
+		btnNewButton.setBounds(58, 58, 105, 81);
 		frmAdminEvents.getContentPane().add(btnNewButton);
 
 		table.getSelectionModel().addListSelectionListener(e -> {

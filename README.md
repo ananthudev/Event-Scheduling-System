@@ -78,4 +78,4 @@ The project follows a standard Java project structure. Here are the main directo
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/ananthudev/Event-Scheduling-System/blob/d34d98dfabdef11a7237f3cb16fd4380c24abd71/LICENSE)
